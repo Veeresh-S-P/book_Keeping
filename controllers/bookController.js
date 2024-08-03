@@ -60,10 +60,53 @@ const deleteBook = asyncHandler(async (req, res) => {
   }
 });
 
+
+const borrowBook = asyncHandler(async (req, res) => {
+  const { bookId } = req.body;
+  const book = await Book.findById(bookId);
+
+  if (!book) {
+    res.status(404);
+    throw new Error('Book not found');
+  }
+
+  if (book.borrower) {
+    res.status(400);
+    throw new Error('Book already borrowed');
+  }
+
+  book.borrower = req.user._id;
+  await book.save();
+
+  res.json(book);
+});
+
+const returnBook = asyncHandler(async (req, res) => {
+  const book = await Book.findById(req.params.id);
+
+  if (!book) {
+    res.status(404);
+    throw new Error('Book not found');
+  }
+
+  if (!book.borrower.equals(req.user._id)) {
+    res.status(403);
+    throw new Error('You are not the borrower of this book');
+  }
+
+  book.borrower = null;
+  await book.save();
+
+  res.json(book);
+});
+
 module.exports = {
   getBooks,
   getBookById,
   createBook,
   updateBook,
   deleteBook,
+  borrowBook,
+  returnBook,
+
 };
