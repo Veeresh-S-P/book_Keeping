@@ -52,7 +52,7 @@ const deleteBook = asyncHandler(async (req, res) => {
   const book = await Book.findById(req.params.id);
 
   if (book) {
-    await book.remove();
+    await book.deleteOne();
     res.json({ message: 'Book removed' });
   } else {
     res.status(404);

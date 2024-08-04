@@ -49,7 +49,7 @@ const deleteLibrary = asyncHandler(async (req, res) => {
   const library = await Library.findById(req.params.id);
 
   if (library) {
-    await library.remove();
+    await library.deleteOne();
     res.json({ message: 'Library removed' });
   } else {
     res.status(404);
