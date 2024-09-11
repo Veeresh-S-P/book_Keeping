@@ -11,7 +11,7 @@ const { setLocale } = require('./utils/multilingual');
 
 
 dotenv.config();
-
+const SecreteKey= process.env.JWT_SECRET
 //connectDB();
 
 const app = express();
@@ -20,7 +20,7 @@ app.use(express.json());
 app.use(setLocale);
 
 app.use('/api/books', bookRoutes);
-app.use('/api/users', userRoutes);
+app.use('/api/users/id', userRoutes);
 app.use('/api/libraries', libraryRoutes);
 
 app.use(notFound);
