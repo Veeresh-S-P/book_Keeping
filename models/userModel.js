@@ -20,6 +20,7 @@ const userSchema = mongoose.Schema({
     enum: ['Author', 'Borrower','Admin'],
     required: true,
   },
+
 }, {
   timestamps: true,
 });

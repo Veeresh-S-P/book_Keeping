@@ -10,6 +10,7 @@ const bookSchema = mongoose.Schema({
     ref: 'User',
     required: true,
   },
+
   library: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Library',
