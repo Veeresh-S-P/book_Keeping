@@ -100,6 +100,38 @@ const returnBook = asyncHandler(async (req, res) => {
   res.json(book);
 });
 
+const suggestBooks = async (req, res) =>{
+  const { bookTitle } = req.body;
+
+  try {
+    const model = genAI.getGenerativeModel({model:'gemini-1.5-flash'});
+
+    const prompt = `
+      Suggest 3 books similar to the given book based on author and title.
+      Respond ONLY with a valid JSON array like:
+      ["Book Title 1", "Book Title 2", "Book Title 3"]
+
+      TEXT: ${bookTitle}
+    `;
+
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    let text = response.text().trim();
+
+    
+    if (text.startsWith("```")){
+      text = text.replace(/```json|```/g, "").trim();
+    }
+
+    const bookssug =JSON.parse(text);
+    res.json({bookssug});
+
+  } catch (err) {
+    console.error("Error suggesting books:", err.message);
+    
+  }
+};
+
 module.exports = {
   getBooks,
   getBookById,
@@ -108,5 +140,5 @@ module.exports = {
   deleteBook,
   borrowBook,
   returnBook,
-
+  suggestBooks
 };

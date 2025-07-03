@@ -12,15 +12,14 @@ const messages = {
       bookRemovedFromInventory: 'Book removed from inventory',
     }
   };
-  
+
   const setLocale = (req, res, next) => {
     const locale = req.query.lang || 'en';
     req.locale = locale;
     req.t = (key) => messages[locale][key] || key;
     next();
   };
-  
+
   module.exports = {
     setLocale,
   };
-  
