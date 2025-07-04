@@ -1,6 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
-const connectDB = require ('./config/dbConfig');
+const connectDB = require ('./config/dbConfig')
+const redisClient = require('./config/redisClient');
 const bookRoutes = require('./routes/bookRoutes');
 const userRoutes = require('./routes/userRoutes');
 const libraryRoutes = require('./routes/libraryRoutes');
@@ -11,7 +12,7 @@ const { setLocale } = require('./utils/multilingual');
 
 
 dotenv.config();
-const SecreteKey= process.env.JWT_SECRET
+//const SecreteKey= process.env.JWT_SECRET
 //connectDB();
 console.log("db connected")
 
