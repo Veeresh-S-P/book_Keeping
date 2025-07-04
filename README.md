@@ -48,9 +48,7 @@ The APIs support English for error and success messages. Use the `lang` query pa
 
 ## Authorization
 
-All endpoints except registration and login require a valid JWT token for access. Only authenticated users with appropriate roles can add or remove books from the library inventory.
+All endpoints except registration and suggest book(GeminiAI) require a valid JWT token for access. Only authenticated users with appropriate roles can add or remove books from the library inventory.
 
 
 
-mongodb+srv://veereshsp:<veereshsp>@cluster0.82ejmn7.mongodb.net/bookkeeping?retryWrites=true&w=majority
-mongodb+srv://nnadagoudar:7022085530Na@cluster0.dpfu8s9.mongodb.net/empman?retryWrites=true&w=majority
