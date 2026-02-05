@@ -14,7 +14,6 @@ Book Keeping is a backend service designed to streamline library operations by p
 - **Borrowing System** - Track book borrowing and returns with charge management
 - **JWT Authentication** - Secure token-based access control
 - **Role-Based Access Control (RBAC)** - Admin, Author, and Borrower roles
-- **Multilingual Support** - Error and success messages in multiple languages
 - **Rate Limiting** - API rate limiting to prevent abuse
 - **Redis Caching** - In-memory caching for improved performance
 - **Error Handling** - Comprehensive error middleware with user-friendly messages
