@@ -2,6 +2,7 @@ const asyncHandler = require('express-async-handler');
 const Book = require('../models/bookModel');
 const Library = require('../models/libraryModel');
 const User = require('../models/userModel');
+const { invalidateBookCache } = require('../utils/cacheUtil');
 
 const getBooks = asyncHandler(async (req, res) => {
   const books = await Book.find({}).populate('author').populate('library').populate('borrower');
@@ -26,6 +27,10 @@ const createBook = asyncHandler(async (req, res) => {
     library,
   });
   const createdBook = await book.save();
+  
+  // Invalidate cache after creating a book
+  await invalidateBookCache();
+  
   res.status(201).json(createdBook);
 });
 
@@ -41,6 +46,10 @@ const updateBook = asyncHandler(async (req, res) => {
     book.borrower = borrower || book.borrower;
 
     const updatedBook = await book.save();
+    
+    // Invalidate cache after updating a book
+    await invalidateBookCache();
+    
     res.json(updatedBook);
   } else {
     res.status(404);
@@ -53,6 +62,10 @@ const deleteBook = asyncHandler(async (req, res) => {
 
   if (book) {
     await book.deleteOne();
+    
+    // Invalidate cache after deleting a book
+    await invalidateBookCache();
+    
     res.json({ message: 'Book removed' });
   } else {
     res.status(404);
@@ -78,6 +91,9 @@ const borrowBook = asyncHandler(async (req, res) => {
   book.borrower = req.user._id;
   await book.save();
 
+  // Invalidate cache after borrowing a book
+  await invalidateBookCache();
+
   res.json(book);
 });
 
@@ -96,6 +112,9 @@ const returnBook = asyncHandler(async (req, res) => {
 
   book.borrower = null;
   await book.save();
+
+  // Invalidate cache after returning a book
+  await invalidateBookCache();
 
   res.json(book);
 });

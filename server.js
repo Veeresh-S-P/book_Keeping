@@ -2,6 +2,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 const connectDB = require ('./config/dbConfig')
 const redisClient = require('./config/redisClient');
+const cacheMiddleware = require('./middleware/cacheMiddleware');
 const bookRoutes = require('./routes/bookRoutes');
 const userRoutes = require('./routes/userRoutes');
 const libraryRoutes = require('./routes/libraryRoutes');
@@ -20,6 +21,7 @@ const app = express();
 
 app.use(express.json());
 app.use(setLocale);
+app.use(cacheMiddleware);
 
 app.use('/api/books', bookRoutes);
 app.use('/api/users', userRoutes);

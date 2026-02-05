@@ -1,6 +1,7 @@
 const asyncHandler = require('express-async-handler');
 const Library = require('../models/libraryModel');
 const Book = require('../models/bookModel');
+const { invalidateLibraryCache } = require('../utils/cacheUtil');
 
 const getLibraries = asyncHandler(async (req, res) => {
   const libraries = await Library.find({}).populate('books');
@@ -25,6 +26,10 @@ const createLibrary = asyncHandler(async (req, res) => {
     address,
   });
   const createdLibrary = await library.save();
+  
+  // Invalidate cache after creating a library
+  await invalidateLibraryCache();
+  
   res.status(201).json(createdLibrary);
 });
 
@@ -38,6 +43,10 @@ const updateLibrary = asyncHandler(async (req, res) => {
     library.address = address || library.address;
 
     const updatedLibrary = await library.save();
+    
+    // Invalidate cache after updating a library
+    await invalidateLibraryCache();
+    
     res.json(updatedLibrary);
   } else {
     res.status(404);
@@ -50,6 +59,10 @@ const deleteLibrary = asyncHandler(async (req, res) => {
 
   if (library) {
     await library.deleteOne();
+    
+    // Invalidate cache after deleting a library
+    await invalidateLibraryCache();
+    
     res.json({ message: 'Library removed' });
   } else {
     res.status(404);
@@ -77,6 +90,10 @@ const addBookToInventory = asyncHandler(async (req, res) => {
     if (book) {
       library.books.push(bookId);
       await library.save();
+      
+      // Invalidate cache after adding book to inventory
+      await invalidateLibraryCache();
+      
       res.json({ message: 'Book added to inventory' });
     } else {
       res.status(404);
@@ -94,6 +111,10 @@ const removeBookFromInventory = asyncHandler(async (req, res) => {
   if (library) {
     library.books.pull(req.params.bookId);
     await library.save();
+    
+    // Invalidate cache after removing book from inventory
+    await invalidateLibraryCache();
+    
     res.json({ message: 'Book removed from inventory' });
   } else {
     res.status(404);
